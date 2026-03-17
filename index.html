@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TATIN TRACK - Élite Pro 4.3</title>
+    <title>TATIN TRACK - Élite Pro 4.4</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,7 +16,7 @@
 
         body { font-family: 'Montserrat', sans-serif; background: var(--bg-grad); color: #ffffff; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; min-height: 100vh; overflow-x: hidden; }
         
-        .header-logo { font-style: italic; font-weight: 900; text-transform: uppercase; font-size: 3.2rem; margin: 5px 0 20px 0; background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 4px 15px rgba(255,0,85,0.4); transform: skewX(-12deg); letter-spacing: -2px; text-align: center; }
+        .header-logo { font-style: italic; font-weight: 900; text-transform: uppercase; font-size: 3.2rem; margin: 5px 0 15px 0; background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 4px 15px rgba(255,0,85,0.4); transform: skewX(-12deg); letter-spacing: -2px; text-align: center; }
 
         .screen { display: none; width: 100%; max-width: 480px; flex-direction: column; align-items: center; }
         .screen.active { display: flex; animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
@@ -25,12 +25,12 @@
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; width: 100%; margin-bottom: 15px; box-sizing: border-box; box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); overflow: hidden; }
         h2 { color: #a0aec0; margin-top: 0; text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; font-weight: 700; }
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         label { display: block; margin-bottom: 6px; font-weight: 700; color: #718096; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
         input[type="number"], select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 16px; box-sizing: border-box; text-align: center; font-weight: 700; font-family: 'Montserrat', sans-serif; -webkit-appearance: none; transition: 0.3s; }
         input[type="number"]:focus, select:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,240,255,0.2); }
         
-        input[type="range"] { -webkit-appearance: none; width: 100%; margin: 15px 0; background: transparent; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; margin: 10px 0; background: transparent; }
         input[type="range"]:focus { outline: none; }
         input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: rgba(255,255,255,0.1); border-radius: 3px; }
         input[type="range"]::-webkit-slider-thumb { border: 3px solid #fff; height: 26px; width: 26px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; -webkit-appearance: none; margin-top: -10px; box-shadow: 0 0 15px var(--neon-blue); transition: transform 0.1s; }
@@ -38,8 +38,18 @@
 
         .ritmo-display { font-size: 40px; font-weight: 900; color: #fff; text-align: center; font-style: italic; transform: skewX(-10deg); margin-top: 5px; text-shadow: 0 0 15px rgba(0,240,255,0.5); }
         
-        /* TAMAÑO BASE DEL CRONÓMETRO (Para Mac/iPad/Móviles grandes) */
-        #display { font-size: 75px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; text-align: center; margin: 15px 0; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -2px; text-shadow: 0 0 20px rgba(255,255,255,0.3); line-height: 1; width: 100%; }
+        /* CONTENEDOR VISTA PREVIA */
+        .preview-container { margin-top: 15px; margin-bottom: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 10px; border: 1px solid rgba(255,255,255,0.05); max-height: 140px; overflow-y: auto; }
+        .preview-container::-webkit-scrollbar { width: 4px; }
+        .preview-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 2px; }
+        .preview-container::-webkit-scrollbar-thumb { background: var(--neon-blue); border-radius: 2px; }
+        .preview-container h3 { margin: 0 0 10px 0; font-size: 10px; color: #a0aec0; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        #tablaPrevia { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #tablaPrevia th { font-size: 9px; padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.1); color: #718096; text-transform: uppercase; }
+        #tablaPrevia td { padding: 8px 6px; text-align: center; border-bottom: 1px dashed rgba(255,255,255,0.05); font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-weight: 700; }
+
+        /* CRONÓMETRO ELASTICO */
+        #display { font-size: clamp(45px, 14vw, 85px); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; text-align: center; margin: 15px 0; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -2px; text-shadow: 0 0 20px rgba(255,255,255,0.3); line-height: 1; width: 100%; white-space: nowrap; }
         
         #lapIndicator { color: var(--neon-pink); font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 2px; }
         
@@ -72,11 +82,6 @@
         .chart-line { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.1); top: 50%; left: 0; z-index: 0; border-top: 1px dashed rgba(255,255,255,0.3); }
         .bar-label { font-size: 9px; color: #a0aec0; position: absolute; bottom: -18px; font-weight: 700; }
 
-        /* ==========================================
-           REGLAS INFALIBLES PARA IPHONE (MEDIA QUERIES)
-           ========================================== */
-        
-        /* Para iPhones normales (ej. iPhone 11, 12, 13, 14, 15) */
         @media (max-width: 430px) {
             #display { font-size: 58px !important; letter-spacing: -1px; }
             .btn-lap { font-size: 32px !important; padding: 35px 15px !important; }
@@ -84,7 +89,6 @@
             .ritmo-display { font-size: 34px; }
         }
 
-        /* Para iPhones pequeños (ej. iPhone SE, 12 mini, 13 mini) */
         @media (max-width: 375px) {
             #display { font-size: 50px !important; letter-spacing: 0px; margin: 10px 0; }
             .btn-lap { font-size: 28px !important; padding: 25px 10px !important; }
@@ -93,9 +97,6 @@
             h2 { font-size: 0.8rem; }
         }
 
-        /* ==========================================
-           MODO IMPRESIÓN (PDF EXPORT)
-           ========================================== */
         @media print {
             body { background: #ffffff !important; color: #000000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0; }
             .card { background: none !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
@@ -112,7 +113,6 @@
             .bar.fast { background: #10b981 !important; box-shadow: none !important; }
             .bar.slow { background: #ef4444 !important; box-shadow: none !important; }
             .bar-label { color: #000 !important; }
-            .print-header { display: block; text-align: center; margin-bottom: 20px; font-weight: bold; }
         }
     </style>
 </head>
@@ -127,22 +127,33 @@
         <div class="grid-2">
             <div>
                 <label>Metros totales:</label>
-                <input type="number" id="distancia" value="2000">
+                <input type="number" id="distancia" value="2000" oninput="actualizarPrevia()">
             </div>
             <div>
                 <label>Corte LAP (m):</label>
-                <select id="lapDist">
+                <select id="lapDist" onchange="actualizarPrevia()">
                     <option value="100">100m</option>
                     <option value="200">200m</option>
                     <option value="400" selected>400m</option>
                 </select>
             </div>
         </div>
-        <div style="margin-bottom: 20px;">
+        <div>
             <label>Ritmo Objetivo:</label>
             <input type="range" id="ritmoSlider" min="120" max="480" value="210" oninput="actualizarTextoRitmo()">
             <div class="ritmo-display" id="ritmoTexto">3:30 min/km</div>
         </div>
+        
+        <div class="preview-container">
+            <h3>Tiempos de Paso Estimados</h3>
+            <table id="tablaPrevia">
+                <thead>
+                    <tr><th>Tramo</th><th>Paso Teórico</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
         <button class="btn-primary" onclick="irAPista()">IR A LA PISTA ➔</button>
     </div>
 </div>
@@ -230,9 +241,33 @@
         return `${m}:${s.toString().padStart(2,'0')}`;
     }
 
+    // ACTUALIZAR VISTA PREVIA EN PANTALLA INICIAL
+    function actualizarPrevia() {
+        let distTotal = parseInt(document.getElementById('distancia').value) || 0;
+        let lSize = parseInt(document.getElementById('lapDist').value) || 400;
+        let segundosKm = parseInt(document.getElementById('ritmoSlider').value);
+        let segundosMetro = segundosKm / 1000;
+        
+        let tbody = document.querySelector("#tablaPrevia tbody");
+        tbody.innerHTML = "";
+        
+        if (distTotal <= 0) return;
+
+        for(let m = lSize; m <= distTotal; m += lSize) {
+            let tiempoObjMs = m * segundosMetro * 1000;
+            tbody.innerHTML += `<tr><td>${m}m</td><td style="color:var(--neon-blue)">${formatTime(tiempoObjMs)}</td></tr>`;
+        }
+        
+        if (distTotal % lSize !== 0) {
+            let tiempoObjMs = distTotal * segundosMetro * 1000;
+            tbody.innerHTML += `<tr><td>${distTotal}m</td><td style="color:var(--neon-blue)">${formatTime(tiempoObjMs)}</td></tr>`;
+        }
+    }
+
     function actualizarTextoRitmo() {
         let segundosKm = parseInt(document.getElementById('ritmoSlider').value);
         document.getElementById('ritmoTexto').innerText = `${formatPace(segundosKm)} min/km`;
+        actualizarPrevia();
     }
 
     function irAPista() {
@@ -421,6 +456,7 @@
         }, 1000);
     }
 
+    // Inicializar la tabla de vista previa al cargar
     actualizarTextoRitmo();
 </script>
 </body>
