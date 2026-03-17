@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TATIN TRACK - Élite Pro 4.1</title>
+    <title>TATIN TRACK - Élite Pro 4.2</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -16,14 +16,12 @@
 
         body { font-family: 'Montserrat', sans-serif; background: var(--bg-grad); color: #ffffff; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; min-height: 100vh; }
         
-        /* LOGO MÁS DINÁMICO */
         .header-logo { font-style: italic; font-weight: 900; text-transform: uppercase; font-size: 3.2rem; margin: 5px 0 20px 0; background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 4px 15px rgba(255,0,85,0.4); transform: skewX(-12deg); letter-spacing: -2px; text-align: center; }
 
         .screen { display: none; width: 100%; max-width: 480px; flex-direction: column; align-items: center; }
         .screen.active { display: flex; animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TARJETAS GLASSMORFISMO */
         .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; width: 100%; margin-bottom: 15px; box-sizing: border-box; box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         h2 { color: #a0aec0; margin-top: 0; text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; font-weight: 700; }
         
@@ -32,7 +30,6 @@
         input[type="number"], select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 16px; box-sizing: border-box; text-align: center; font-weight: 700; font-family: 'Montserrat', sans-serif; -webkit-appearance: none; transition: 0.3s; }
         input[type="number"]:focus, select:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,240,255,0.2); }
         
-        /* SLIDER NEÓN */
         input[type="range"] { -webkit-appearance: none; width: 100%; margin: 15px 0; background: transparent; }
         input[type="range"]:focus { outline: none; }
         input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: rgba(255,255,255,0.1); border-radius: 3px; }
@@ -41,16 +38,14 @@
 
         .ritmo-display { font-size: 40px; font-weight: 900; color: #fff; text-align: center; font-style: italic; transform: skewX(-10deg); margin-top: 5px; text-shadow: 0 0 15px rgba(0,240,255,0.5); }
         
-        /* FUENTE DE CRONÓMETRO CLARA (Sistema Apple Nativo) */
-        #display { font-size: 85px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; text-align: center; margin: 15px 0; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -2px; text-shadow: 0 0 20px rgba(255,255,255,0.3); line-height: 1; }
+        /* AQUÍ ESTÁ LA MAGIA DEL CRONO RESPONSIVE: clamp() asegura que no se salga de la pantalla */
+        #display { font-size: clamp(45px, 14vw, 85px); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; text-align: center; margin: 15px 0; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -2px; text-shadow: 0 0 20px rgba(255,255,255,0.3); line-height: 1; width: 100%; white-space: nowrap; }
         
         #lapIndicator { color: var(--neon-pink); font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 2px; }
         
-        /* BARRA DE PROGRESO DE VUELTA */
         .progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
         #progressBar { width: 0%; height: 100%; background: linear-gradient(90deg, #00b4db 0%, var(--neon-blue) 100%); transition: width 0.1s linear, background 0.3s; box-shadow: 0 0 15px var(--neon-blue); }
 
-        /* BOTONES DINÁMICOS */
         button { width: 100%; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
         button:active { transform: scale(0.95); }
         .btn-primary { background: linear-gradient(135deg, #0055ff, #00d4ff); color: white; padding: 20px; font-size: 18px; box-shadow: 0 8px 20px rgba(0, 170, 255, 0.3); }
@@ -69,7 +64,6 @@
         
         #flashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s; z-index: 9999; }
         
-        /* Contenedor Gráfica */
         .chart-container { width: 100%; height: 160px; position: relative; margin-top: 20px; padding-bottom: 5px; display: flex; align-items: flex-end; justify-content: space-around; background: rgba(0,0,0,0.2); border-radius: 10px; padding-top: 10px; }
         .bar-group { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; width: 100%; height: 100%; position: relative; }
         .bar { width: 65%; border-radius: 4px 4px 0 0; position: absolute; bottom: 50%; transition: height 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -78,9 +72,6 @@
         .chart-line { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.1); top: 50%; left: 0; z-index: 0; border-top: 1px dashed rgba(255,255,255,0.3); }
         .bar-label { font-size: 9px; color: #a0aec0; position: absolute; bottom: -18px; font-weight: 700; }
 
-        /* ==========================================
-           MODO IMPRESIÓN (PDF EXPORT)
-           ========================================== */
         @media print {
             body { background: #ffffff !important; color: #000000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0; }
             .card { background: none !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
@@ -339,7 +330,6 @@
         let maxDiff = 0;
         let diferencias = [];
         
-        // Datos para el PDF
         let distFinal = document.getElementById('distancia').value;
         let ritmoFinal = document.getElementById('ritmoTexto').innerText;
         let fecha = new Date().toLocaleDateString();
@@ -374,7 +364,6 @@
 
         if (maxDiff === 0) maxDiff = 1; 
         
-        // Timeout para que la animación de la gráfica entre con estilo
         setTimeout(() => {
             diferencias.forEach((dif, index) => {
                 let pct = (Math.abs(dif) / maxDiff) * 45; 
@@ -386,7 +375,6 @@
                 let bar = document.createElement('div');
                 bar.className = `bar ${isFast ? 'fast' : 'slow'}`;
                 
-                // Efecto de crecimiento
                 bar.style.height = '0%';
                 setTimeout(() => { bar.style.height = `${pct}%`; }, 100 + (index * 50));
                 
@@ -401,7 +389,6 @@
         }, 300);
     }
 
-    // EXPORTACIÓN NATIVA A PDF
     function exportarPDF() {
         document.getElementById('printInfo').style.display = 'block';
         window.print();
