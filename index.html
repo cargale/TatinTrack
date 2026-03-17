@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TATIN TRACK - Élite Pro 4.1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f0ff;
+            --neon-pink: #ff0055;
+            --neon-green: #00ff88;
+            --bg-grad: linear-gradient(135deg, #0b0f19 0%, #1a1525 100%);
+            --card-bg: linear-gradient(180deg, rgba(30,35,50,0.8) 0%, rgba(15,20,30,0.95) 100%);
+        }
+
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg-grad); color: #ffffff; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; min-height: 100vh; }
+        
+        /* LOGO MÁS DINÁMICO */
+        .header-logo { font-style: italic; font-weight: 900; text-transform: uppercase; font-size: 3.2rem; margin: 5px 0 20px 0; background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-pink) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0px 4px 15px rgba(255,0,85,0.4); transform: skewX(-12deg); letter-spacing: -2px; text-align: center; }
+
+        .screen { display: none; width: 100%; max-width: 480px; flex-direction: column; align-items: center; }
+        .screen.active { display: flex; animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* TARJETAS GLASSMORFISMO */
+        .card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.05); padding: 20px; border-radius: 16px; width: 100%; margin-bottom: 15px; box-sizing: border-box; box-shadow: 0 15px 35px rgba(0,0,0,0.6); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        h2 { color: #a0aec0; margin-top: 0; text-align: center; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; font-weight: 700; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 6px; font-weight: 700; color: #718096; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+        input[type="number"], select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; font-size: 16px; box-sizing: border-box; text-align: center; font-weight: 700; font-family: 'Montserrat', sans-serif; -webkit-appearance: none; transition: 0.3s; }
+        input[type="number"]:focus, select:focus { border-color: var(--neon-blue); outline: none; box-shadow: 0 0 10px rgba(0,240,255,0.2); }
+        
+        /* SLIDER NEÓN */
+        input[type="range"] { -webkit-appearance: none; width: 100%; margin: 15px 0; background: transparent; }
+        input[type="range"]:focus { outline: none; }
+        input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: rgba(255,255,255,0.1); border-radius: 3px; }
+        input[type="range"]::-webkit-slider-thumb { border: 3px solid #fff; height: 26px; width: 26px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; -webkit-appearance: none; margin-top: -10px; box-shadow: 0 0 15px var(--neon-blue); transition: transform 0.1s; }
+        input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+        .ritmo-display { font-size: 40px; font-weight: 900; color: #fff; text-align: center; font-style: italic; transform: skewX(-10deg); margin-top: 5px; text-shadow: 0 0 15px rgba(0,240,255,0.5); }
+        
+        /* FUENTE DE CRONÓMETRO CLARA (Sistema Apple Nativo) */
+        #display { font-size: 85px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-weight: 800; text-align: center; margin: 15px 0; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -2px; text-shadow: 0 0 20px rgba(255,255,255,0.3); line-height: 1; }
+        
+        #lapIndicator { color: var(--neon-pink); font-size: 14px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 2px; }
+        
+        /* BARRA DE PROGRESO DE VUELTA */
+        .progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; overflow: hidden; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); }
+        #progressBar { width: 0%; height: 100%; background: linear-gradient(90deg, #00b4db 0%, var(--neon-blue) 100%); transition: width 0.1s linear, background 0.3s; box-shadow: 0 0 15px var(--neon-blue); }
+
+        /* BOTONES DINÁMICOS */
+        button { width: 100%; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow: hidden; margin-bottom: 12px; font-family: 'Montserrat', sans-serif; letter-spacing: 1px; }
+        button:active { transform: scale(0.95); }
+        .btn-primary { background: linear-gradient(135deg, #0055ff, #00d4ff); color: white; padding: 20px; font-size: 18px; box-shadow: 0 8px 20px rgba(0, 170, 255, 0.3); }
+        .btn-lap { background: linear-gradient(135deg, #ffd700, #ff8c00); color: #000; font-size: 38px; padding: 45px 20px; transform: skewX(-5deg); box-shadow: 0 10px 25px rgba(255, 140, 0, 0.4); font-style: italic; }
+        .btn-lap:disabled { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.2); box-shadow: none; transform: none; }
+        .btn-danger { background: linear-gradient(135deg, #ff0055, #ff5555); color: white; padding: 18px; font-size: 16px; box-shadow: 0 8px 20px rgba(255, 0, 85, 0.3); }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: white; padding: 18px; font-size: 16px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); }
+        .btn-pdf { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 18px; font-size: 16px; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); margin-top: 15px;}
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th { border-bottom: 1px solid rgba(255,255,255,0.1); padding: 10px 4px; color: #a0aec0; text-align: center; text-transform: uppercase; font-size: 10px; letter-spacing: 1px; }
+        td { padding: 14px 4px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 15px; font-weight: 700; }
+        
+        .ahead { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,136,0.4); } 
+        .behind { color: var(--neon-pink); text-shadow: 0 0 10px rgba(255,0,85,0.4); }
+        
+        #flashOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s; z-index: 9999; }
+        
+        /* Contenedor Gráfica */
+        .chart-container { width: 100%; height: 160px; position: relative; margin-top: 20px; padding-bottom: 5px; display: flex; align-items: flex-end; justify-content: space-around; background: rgba(0,0,0,0.2); border-radius: 10px; padding-top: 10px; }
+        .bar-group { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; width: 100%; height: 100%; position: relative; }
+        .bar { width: 65%; border-radius: 4px 4px 0 0; position: absolute; bottom: 50%; transition: height 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .bar.fast { background: linear-gradient(180deg, var(--neon-green) 0%, #00b35f 100%); box-shadow: 0 0 10px rgba(0,255,136,0.3); transform-origin: bottom; }
+        .bar.slow { background: linear-gradient(0deg, var(--neon-pink) 0%, #cc0044 100%); box-shadow: 0 0 10px rgba(255,0,85,0.3); top: 50%; bottom: auto; border-radius: 0 0 4px 4px; }
+        .chart-line { position: absolute; width: 100%; height: 1px; background: rgba(255,255,255,0.1); top: 50%; left: 0; z-index: 0; border-top: 1px dashed rgba(255,255,255,0.3); }
+        .bar-label { font-size: 9px; color: #a0aec0; position: absolute; bottom: -18px; font-weight: 700; }
+
+        /* ==========================================
+           MODO IMPRESIÓN (PDF EXPORT)
+           ========================================== */
+        @media print {
+            body { background: #ffffff !important; color: #000000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 0; }
+            .card { background: none !important; box-shadow: none !important; border: none !important; padding: 0 !important; }
+            .header-logo { background: none !important; -webkit-text-fill-color: #000 !important; text-shadow: none !important; color: #000 !important; margin-top: 0; }
+            button, #screen-config, #screen-tracker { display: none !important; }
+            #screen-summary { display: flex !important; }
+            h2 { color: #000 !important; border-bottom: 2px solid #000 !important; }
+            th { color: #555 !important; border-bottom: 1px solid #000 !important; }
+            td { color: #000 !important; border-bottom: 1px solid #ccc !important; }
+            .ahead { color: #059669 !important; text-shadow: none !important; }
+            .behind { color: #dc2626 !important; text-shadow: none !important; }
+            .chart-container { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
+            .chart-line { border-top: 1px dashed #94a3b8 !important; }
+            .bar.fast { background: #10b981 !important; box-shadow: none !important; }
+            .bar.slow { background: #ef4444 !important; box-shadow: none !important; }
+            .bar-label { color: #000 !important; }
+            .print-header { display: block; text-align: center; margin-bottom: 20px; font-weight: bold; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="flashOverlay"></div>
+<div class="header-logo">TATIN TRACK</div>
+
+<div id="screen-config" class="screen active">
+    <div class="card">
+        <h2>Preparar Serie</h2>
+        <div class="grid-2">
+            <div>
+                <label>Metros totales:</label>
+                <input type="number" id="distancia" value="2000">
+            </div>
+            <div>
+                <label>Corte LAP (m):</label>
+                <select id="lapDist">
+                    <option value="100">100m</option>
+                    <option value="200">200m</option>
+                    <option value="400" selected>400m</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label>Ritmo Objetivo:</label>
+            <input type="range" id="ritmoSlider" min="120" max="480" value="210" oninput="actualizarTextoRitmo()">
+            <div class="ritmo-display" id="ritmoTexto">3:30 min/km</div>
+        </div>
+        <button class="btn-primary" onclick="irAPista()">IR A LA PISTA ➔</button>
+    </div>
+</div>
+
+<div id="screen-tracker" class="screen">
+    <div class="card" style="text-align:center;">
+        <div id="lapIndicator">PREPARADO</div>
+        <div id="display">00:00.00</div>
+        
+        <div class="progress-container">
+            <div id="progressBar"></div>
+        </div>
+
+        <button id="btnStart" class="btn-primary" onclick="toggleCrono()">▶ EMPEZAR</button>
+        <button id="btnLap" class="btn-lap" onclick="registrarLap()" disabled>LAP</button>
+        <button class="btn-danger" onclick="finalizarSerie()">■ FINALIZAR SERIE</button>
+    </div>
+</div>
+
+<div id="screen-summary" class="screen">
+    <div class="card">
+        <h2>Análisis de Rendimiento</h2>
+        <div id="printInfo" style="display:none; text-align:center; margin-bottom:15px; font-size:12px; font-weight:bold;"></div>
+        
+        <div class="chart-container" id="chartArea">
+            <div class="chart-line"></div>
+        </div>
+        <div style="text-align:center; font-size:10px; color:#a0aec0; margin-bottom:15px; margin-top:8px; font-weight:700; letter-spacing:1px;">
+            ARRIBA (VERDE) = RÁPIDO | ABAJO (ROJO) = LENTO
+        </div>
+
+        <table id="tablaResumen">
+            <thead>
+                <tr><th>Tramo</th><th>Parcial</th><th>Ritmo/km</th><th>Dif</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        
+        <button class="btn-pdf" onclick="exportarPDF()">📄 EXPORTAR A PDF</button>
+        <button class="btn-secondary" onclick="location.reload()">NUEVA SERIE ↺</button>
+    </div>
+</div>
+
+<script>
+    let audioCtx = null;
+    let inicio, intervalo, enMarcha = false;
+    let lapsData = [];
+    let lapActual = 0;
+    let lapSize = 400;
+
+    function initAudio() {
+        try {
+            let AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext && !audioCtx) { audioCtx = new AudioContext(); }
+            if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+        } catch(e) {}
+    }
+
+    function playBeep(frequency, duration) {
+        try {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.value = frequency;
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            oscillator.stop(audioCtx.currentTime + duration);
+        } catch(e) {} 
+    }
+
+    function formatTime(ms) {
+        let total = ms / 1000;
+        let m = Math.floor(total / 60);
+        let s = Math.floor(total % 60);
+        let cs = Math.floor((ms % 1000) / 10);
+        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}.${cs.toString().padStart(2,'0')}`;
+    }
+    
+    function formatPace(secs) {
+        let m = Math.floor(secs / 60);
+        let s = Math.floor(secs % 60);
+        return `${m}:${s.toString().padStart(2,'0')}`;
+    }
+
+    function actualizarTextoRitmo() {
+        let segundosKm = parseInt(document.getElementById('ritmoSlider').value);
+        document.getElementById('ritmoTexto').innerText = `${formatPace(segundosKm)} min/km`;
+    }
+
+    function irAPista() {
+        let distTotal = parseInt(document.getElementById('distancia').value);
+        lapSize = parseInt(document.getElementById('lapDist').value);
+        let segundosKm = parseInt(document.getElementById('ritmoSlider').value);
+        let segundosMetro = segundosKm / 1000;
+        
+        lapsData = [];
+        lapActual = 0;
+
+        for(let m = lapSize; m <= distTotal; m += lapSize) {
+            lapsData.push({ metros: m, tiempoObjMsec: m * segundosMetro * 1000, realTimeMsec: null, duracionTramo: null });
+        }
+        if (distTotal % lapSize !== 0) {
+            lapsData.push({ metros: distTotal, tiempoObjMsec: distTotal * segundosMetro * 1000, realTimeMsec: null, duracionTramo: null });
+        }
+
+        document.getElementById('btnLap').innerText = `LAP ${lapSize}m`;
+        document.getElementById('lapIndicator').innerText = `VUELTA 1 DE ${lapsData.length}`;
+        
+        document.getElementById('screen-config').classList.remove('active');
+        document.getElementById('screen-tracker').classList.add('active');
+    }
+
+    function toggleCrono() {
+        initAudio();
+        if (!enMarcha) {
+            inicio = Date.now() - (inicio ? (Date.now() - inicio) : 0);
+            intervalo = setInterval(() => {
+                let msActual = Date.now() - inicio;
+                document.getElementById('display').innerText = formatTime(msActual);
+                actualizarBarra(msActual);
+            }, 30);
+            document.getElementById('btnStart').innerText = "⏸ PAUSAR";
+            document.getElementById('btnStart').style.background = "rgba(255,255,255,0.1)";
+            document.getElementById('btnStart').style.boxShadow = "none";
+            document.getElementById('btnLap').disabled = false;
+            enMarcha = true;
+        } else {
+            clearInterval(intervalo);
+            document.getElementById('btnStart').innerText = "▶ REANUDAR";
+            document.getElementById('btnStart').style.background = "linear-gradient(135deg, #0055ff, #00d4ff)";
+            document.getElementById('btnStart').style.boxShadow = "0 8px 20px rgba(0, 170, 255, 0.3)";
+            enMarcha = false;
+        }
+    }
+
+    function actualizarBarra(msActual) {
+        if (lapActual >= lapsData.length) return;
+        
+        let tObjActual = lapsData[lapActual].tiempoObjMsec;
+        let tObjAnterior = lapActual === 0 ? 0 : lapsData[lapActual-1].tiempoObjMsec;
+        let msAnterior = lapActual === 0 ? 0 : lapsData[lapActual-1].realTimeMsec;
+        
+        let transcurridoTramo = msActual - msAnterior;
+        let objetivoTramo = tObjActual - tObjAnterior;
+        
+        let porcentaje = (transcurridoTramo / objetivoTramo) * 100;
+        let barra = document.getElementById('progressBar');
+        
+        if (porcentaje <= 100) {
+            barra.style.width = porcentaje + '%';
+            barra.style.background = 'linear-gradient(90deg, #00b4db 0%, var(--neon-blue) 100%)';
+            barra.style.boxShadow = '0 0 15px var(--neon-blue)';
+        } else {
+            barra.style.width = '100%';
+            barra.style.background = 'linear-gradient(90deg, #ff0055 0%, #ff5555 100%)';
+            barra.style.boxShadow = '0 0 15px var(--neon-pink)';
+        }
+    }
+
+    function registrarLap() {
+        if (lapActual >= lapsData.length) return;
+        
+        let msActual = Date.now() - inicio;
+        let msAnterior = lapActual === 0 ? 0 : lapsData[lapActual-1].realTimeMsec;
+        
+        lapsData[lapActual].realTimeMsec = msActual;
+        lapsData[lapActual].duracionTramo = msActual - msAnterior;
+        
+        let diferencia = (msActual - lapsData[lapActual].tiempoObjMsec) / 1000;
+
+        let overlay = document.getElementById('flashOverlay');
+        if (diferencia <= 0) {
+            overlay.style.backgroundColor = 'rgba(0, 255, 136, 0.4)'; 
+            playBeep(880, 0.4); 
+        } else {
+            overlay.style.backgroundColor = 'rgba(255, 0, 85, 0.4)'; 
+            playBeep(300, 0.6); 
+        }
+        overlay.style.opacity = '1';
+        setTimeout(() => { overlay.style.opacity = '0'; }, 150);
+
+        lapActual++;
+        
+        if (lapActual < lapsData.length) {
+            document.getElementById('lapIndicator').innerText = `VUELTA ${lapActual + 1} DE ${lapsData.length}`;
+        } else {
+            finalizarSerie();
+        }
+    }
+
+    function finalizarSerie() {
+        clearInterval(intervalo);
+        enMarcha = false;
+        document.getElementById('screen-tracker').classList.remove('active');
+        document.getElementById('screen-summary').classList.add('active');
+        generarResumen();
+    }
+
+    function generarResumen() {
+        let tbody = document.querySelector("#tablaResumen tbody");
+        tbody.innerHTML = "";
+        
+        let chartArea = document.getElementById('chartArea');
+        chartArea.innerHTML = '<div class="chart-line"></div>';
+
+        let maxDiff = 0;
+        let diferencias = [];
+        
+        // Datos para el PDF
+        let distFinal = document.getElementById('distancia').value;
+        let ritmoFinal = document.getElementById('ritmoTexto').innerText;
+        let fecha = new Date().toLocaleDateString();
+        document.getElementById('printInfo').innerText = `Entrenamiento: ${distFinal}m | Objetivo: ${ritmoFinal} | Fecha: ${fecha}`;
+
+        for(let i = 0; i < lapsData.length; i++) {
+            let lap = lapsData[i];
+            if(!lap.realTimeMsec) break;
+
+            let distTramo = i === 0 ? lap.metros : lap.metros - lapsData[i-1].metros;
+            let targetTramo = i === 0 ? lap.tiempoObjMsec : lap.tiempoObjMsec - lapsData[i-1].tiempoObjMsec;
+            
+            let difMsec = lap.duracionTramo - targetTramo;
+            let difSeg = difMsec / 1000;
+            diferencias.push(difSeg);
+            
+            if(Math.abs(difSeg) > maxDiff) maxDiff = Math.abs(difSeg);
+
+            let ritmoParcialSeg = (lap.duracionTramo / 1000) / (distTramo / 1000);
+            
+            let difClass = difSeg <= 0 ? "ahead" : "behind";
+            let difSign = difSeg > 0 ? "+" : "";
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${lap.metros}m</td>
+                    <td>${formatTime(lap.duracionTramo)}</td>
+                    <td style="color:var(--neon-blue)">${formatPace(ritmoParcialSeg)}</td>
+                    <td class="${difClass}">${difSign}${difSeg.toFixed(1)}s</td>
+                </tr>`;
+        }
+
+        if (maxDiff === 0) maxDiff = 1; 
+        
+        // Timeout para que la animación de la gráfica entre con estilo
+        setTimeout(() => {
+            diferencias.forEach((dif, index) => {
+                let pct = (Math.abs(dif) / maxDiff) * 45; 
+                let isFast = dif <= 0;
+                
+                let barGroup = document.createElement('div');
+                barGroup.className = 'bar-group';
+                
+                let bar = document.createElement('div');
+                bar.className = `bar ${isFast ? 'fast' : 'slow'}`;
+                
+                // Efecto de crecimiento
+                bar.style.height = '0%';
+                setTimeout(() => { bar.style.height = `${pct}%`; }, 100 + (index * 50));
+                
+                let label = document.createElement('div');
+                label.className = 'bar-label';
+                label.innerText = `L${index+1}`;
+
+                barGroup.appendChild(bar);
+                barGroup.appendChild(label);
+                chartArea.appendChild(barGroup);
+            });
+        }, 300);
+    }
+
+    // EXPORTACIÓN NATIVA A PDF
+    function exportarPDF() {
+        document.getElementById('printInfo').style.display = 'block';
+        window.print();
+        setTimeout(() => {
+            document.getElementById('printInfo').style.display = 'none';
+        }, 1000);
+    }
+
+    actualizarTextoRitmo();
+</script>
+</body>
+</html>
